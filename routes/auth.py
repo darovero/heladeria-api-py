@@ -3,7 +3,6 @@ from flask_login import login_user, logout_user, login_required, current_user
 from models.user import User
 from models.db import db
 
-# ✅ Define el Blueprint correctamente
 auth = Blueprint('auth', __name__)
 
 @auth.route('/register', methods=['POST'])
