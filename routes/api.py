@@ -17,8 +17,9 @@ def obtener_productos():
         'tipo': p.tipo
     } for p in productos]), 200
 
-# 📌 Obtener un producto por ID (Accesible por todos)
+# 📌 Obtener un producto por ID (Debe requerir autenticación)
 @api.route('/producto/<int:id>', methods=['GET'])
+@login_required
 def obtener_producto(id):
     producto = Producto.query.get(id)
     if not producto:
@@ -30,11 +31,26 @@ def obtener_producto(id):
         'tipo': producto.tipo
     }), 200
 
-# 📌 Vender un producto (Solo Admins y Empleados)
+# 📌 Obtener calorías de un producto (Solo Clientes, Empleados y Admins)
+@api.route('/producto/<int:id>/calorias', methods=['GET'])
+@login_required
+def obtener_calorias_producto(id):
+    if not (current_user.es_admin or current_user.es_empleado or not current_user.es_admin and not current_user.es_empleado):
+        return jsonify({'error': 'Acceso no autorizado'}), 403
+
+    producto = Producto.query.get(id)
+    if not producto:
+        return jsonify({'error': 'Producto no encontrado'}), 404
+    return jsonify({
+        'id': producto.id,
+        'calorias': producto.calorias_totales()
+    }), 200
+
+# 📌 Vender un producto (Solo Clientes, Empleados y Admins)
 @api.route('/producto/<int:id>/vender', methods=['POST'])
 @login_required
 def vender_producto(id):
-    if not current_user.es_admin and not current_user.es_empleado:
+    if not (current_user.es_admin or current_user.es_empleado or (not current_user.es_admin and not current_user.es_empleado)):
         return jsonify({'error': 'Acceso no autorizado'}), 403
 
     producto = Producto.query.get(id)
@@ -46,6 +62,22 @@ def vender_producto(id):
         return jsonify({'mensaje': resultado}), 200
     except ValueError as e:
         return jsonify({'error': str(e)}), 400
+
+# 📌 Obtener rentabilidad de un producto (Solo Admins)
+@api.route('/producto/<int:id>/rentabilidad', methods=['GET'])
+@login_required
+def obtener_rentabilidad_producto(id):
+    if not current_user.es_admin:
+        return jsonify({'error': 'Acceso no autorizado'}), 403
+
+    producto = Producto.query.get(id)
+    if not producto:
+        return jsonify({'error': 'Producto no encontrado'}), 404
+
+    return jsonify({
+        'id': producto.id,
+        'rentabilidad': producto.calcular_rentabilidad()
+    }), 200
 
 # 📌 Reabastecer un producto (Solo Admins)
 @api.route('/producto/<int:id>/reabastecer', methods=['POST'])

@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, redirect, url_for
+from flask import Blueprint, request, jsonify
 from flask_login import login_user, logout_user, login_required, current_user
 from models.user import User
 from models.db import db
@@ -32,7 +32,7 @@ def register():
 
 @auth.route('/login', methods=['POST'])
 def login():
-    """Autentica un usuario y devuelve un JSON con su información."""
+    """Autentica un usuario y devuelve su información."""
     data = request.get_json()
     username = data.get('username')
     password = data.get('password')
