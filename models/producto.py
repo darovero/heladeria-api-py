@@ -1,6 +1,5 @@
 from models.db import db
 
-# Tabla intermedia para la relación muchos a muchos entre Producto e Ingrediente
 producto_ingrediente = db.Table(
     "producto_ingrediente",
     db.Column("producto_id", db.Integer, db.ForeignKey("producto.id"), primary_key=True),

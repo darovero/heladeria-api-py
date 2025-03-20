@@ -10,7 +10,6 @@ class Ingrediente(db.Model):
     stock = db.Column(db.Integer, nullable=False, default=10)
     heladeria_id = db.Column(db.Integer, db.ForeignKey("heladeria.id"), nullable=False)
 
-    # Relación con Productos
     productos = db.relationship(
         "Producto",
         secondary="producto_ingrediente",

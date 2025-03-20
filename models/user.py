@@ -9,8 +9,8 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(100), unique=True, nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=True)
     password_hash = db.Column(db.String(200), nullable=False)
-    es_admin = db.Column(db.Boolean, default=False, nullable=False)  # Nuevo campo para admins
-    es_empleado = db.Column(db.Boolean, default=False, nullable=False)  # Nuevo campo para empleados
+    es_admin = db.Column(db.Boolean, default=False, nullable=False)
+    es_empleado = db.Column(db.Boolean, default=False, nullable=False)
 
     def __init__(self, username, password, email=None, es_admin=False, es_empleado=False):
         """Inicializa un usuario con username, contraseña encriptada y roles opcionales"""

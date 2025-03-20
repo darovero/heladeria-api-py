@@ -6,7 +6,6 @@ from models.ingredientes import Ingrediente
 
 api = Blueprint('api', __name__, url_prefix='/api')
 
-# 📌 Obtener todos los productos (Accesible por todos)
 @api.route('/productos', methods=['GET'])
 def obtener_productos():
     productos = Producto.query.all()
@@ -17,7 +16,6 @@ def obtener_productos():
         'tipo': p.tipo
     } for p in productos]), 200
 
-# 📌 Obtener un producto por ID (Debe requerir autenticación)
 @api.route('/producto/<int:id>', methods=['GET'])
 @login_required
 def obtener_producto(id):
@@ -31,7 +29,6 @@ def obtener_producto(id):
         'tipo': producto.tipo
     }), 200
 
-# 📌 Obtener calorías de un producto (Solo Clientes, Empleados y Admins)
 @api.route('/producto/<int:id>/calorias', methods=['GET'])
 @login_required
 def obtener_calorias_producto(id):
@@ -46,7 +43,6 @@ def obtener_calorias_producto(id):
         'calorias': producto.calorias_totales()
     }), 200
 
-# 📌 Vender un producto (Solo Clientes, Empleados y Admins)
 @api.route('/producto/<int:id>/vender', methods=['POST'])
 @login_required
 def vender_producto(id):
@@ -63,7 +59,6 @@ def vender_producto(id):
     except ValueError as e:
         return jsonify({'error': str(e)}), 400
 
-# 📌 Obtener rentabilidad de un producto (Solo Admins)
 @api.route('/producto/<int:id>/rentabilidad', methods=['GET'])
 @login_required
 def obtener_rentabilidad_producto(id):
@@ -79,7 +74,6 @@ def obtener_rentabilidad_producto(id):
         'rentabilidad': producto.calcular_rentabilidad()
     }), 200
 
-# 📌 Reabastecer un producto (Solo Admins)
 @api.route('/producto/<int:id>/reabastecer', methods=['POST'])
 @login_required
 def reabastecer_producto(id):
@@ -104,7 +98,6 @@ def reabastecer_producto(id):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-# 📌 Renovar inventario de un producto (Solo Admins)
 @api.route('/producto/<int:id>/renovar_inventario', methods=['POST'])
 @login_required
 def renovar_inventario_producto(id):
