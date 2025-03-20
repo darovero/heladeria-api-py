@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenido</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        h1 { color: #2c3e50; }
+        button { background-color: #ff4b5c; color: white; border: none; padding: 10px 20px; cursor: pointer; }
+        button:hover { background-color: #ff1c3b; }
+    </style>
+</head>
+<body>
+    <h1>¡Bienvenido, {{ username }}! 🎉</h1>
+    <p>Has iniciado sesión correctamente.</p>
+    <form action="{{ url_for('auth.logout') }}" method="post">
+        <button type="submit">Cerrar Sesión</button>
+    </form>
+</body>
+</html>
