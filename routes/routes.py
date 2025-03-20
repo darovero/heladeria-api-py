@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, jsonify
+from flask_login import login_required, current_user
 from models.db import db
 from models.producto import Producto
 from models.ingredientes import Ingrediente
@@ -8,13 +9,19 @@ app_routes = Blueprint('app_routes', __name__)
 
 @app_routes.route('/')
 def home():
-    """Carga solo la lista de productos para el Menú de Productos en la página index.html."""
-    productos = Producto.query.all()  
+    """Carga la lista de productos y muestra la página de inicio."""
+    productos = Producto.query.all()
 
     if not productos:
         return "⚠ No hay productos disponibles.", 500
 
     return render_template("index.html", productos=productos)
+
+@app_routes.route('/welcome')
+@login_required
+def welcome():
+    """Página de bienvenida después del inicio de sesión."""
+    return render_template("welcome.html", username=current_user.username)
 
 @app_routes.route('/vender/<int:producto_id>')
 def vender_producto(producto_id):
@@ -39,7 +46,8 @@ def vender_producto(producto_id):
         return jsonify({"mensaje": f"¡Oh no! Nos hemos quedado sin {error}"}), 400
 
 def cargar_datos_iniciales():
-    with db.session.no_autoflush: 
+    """Carga los datos de ingredientes y productos en la base de datos."""
+    with db.session.no_autoflush:
 
         heladeria = Heladeria.query.first()
         if not heladeria:
