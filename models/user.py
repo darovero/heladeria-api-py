@@ -9,12 +9,16 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(100), unique=True, nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=True)
     password_hash = db.Column(db.String(200), nullable=False)
+    es_admin = db.Column(db.Boolean, default=False, nullable=False)  # Nuevo campo para admins
+    es_empleado = db.Column(db.Boolean, default=False, nullable=False)  # Nuevo campo para empleados
 
-    def __init__(self, username, password, email=None):
-        """Inicializa un usuario con username y contraseña encriptada"""
+    def __init__(self, username, password, email=None, es_admin=False, es_empleado=False):
+        """Inicializa un usuario con username, contraseña encriptada y roles opcionales"""
         self.username = username
         self.email = email
         self.password_hash = generate_password_hash(password).decode('utf-8')
+        self.es_admin = es_admin
+        self.es_empleado = es_empleado
 
     def verify_password(self, password):
         """Verifica si la contraseña ingresada es correcta"""
@@ -27,3 +31,6 @@ class User(db.Model, UserMixin):
         if user and user.verify_password(password):
             return user
         return None
+
+    def __repr__(self):
+        return f"<User {self.username} - Admin: {self.es_admin} | Empleado: {self.es_empleado}>"
