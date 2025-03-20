@@ -6,6 +6,7 @@ from models.db import db
 from models.user import User
 from routes.auth import auth
 from routes.routes import app_routes, cargar_datos_iniciales
+from routes.api import api  # Importar las rutas del API
 
 app = Flask(__name__, template_folder="views")
 app.config.from_object(Config)
@@ -28,11 +29,12 @@ def load_user(user_id):
     """Carga el usuario por ID en la sesión de Flask-Login"""
     return User.query.get(int(user_id))
 
-# Registrar blueprints de autenticación y rutas principales
+# Registrar blueprints de autenticación, rutas principales y API
 app.register_blueprint(auth, url_prefix="/auth")
 app.register_blueprint(app_routes)
+app.register_blueprint(api, url_prefix="/api")  # Registrar API con prefijo "/api"
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     with app.app_context():
         db.create_all()  # Crea las tablas en la base de datos si no existen
         cargar_datos_iniciales()  # Carga datos iniciales en la DB
