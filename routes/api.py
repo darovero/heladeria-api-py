@@ -6,7 +6,6 @@ from models.ingredientes import Ingrediente
 
 api = Blueprint('api', __name__, url_prefix='/api')
 
-# Acceso: Cualquiera
 @api.route('/productos', methods=['GET'])
 def obtener_productos():
     productos = Producto.query.all()
@@ -17,7 +16,6 @@ def obtener_productos():
         'tipo': p.tipo
     } for p in productos]), 200
 
-# Acceso: Admins y empleados
 @api.route('/producto/<int:id>', methods=['GET'])
 @login_required
 def obtener_producto(id):
@@ -33,7 +31,6 @@ def obtener_producto(id):
         'tipo': producto.tipo
     }), 200
 
-# Acceso: Todos los usuarios autenticados
 @api.route('/producto/<int:id>/calorias', methods=['GET'])
 @login_required
 def obtener_calorias_producto(id):
@@ -45,7 +42,6 @@ def obtener_calorias_producto(id):
         'calorias': producto.calorias_totales()
     }), 200
 
-# Acceso: Todos los usuarios autenticados
 @api.route('/producto/<int:id>/vender', methods=['POST'])
 @login_required
 def vender_producto(id):
@@ -58,7 +54,6 @@ def vender_producto(id):
     except ValueError as e:
         return jsonify({'error': str(e)}), 400
 
-# Acceso: Solo Admins
 @api.route('/producto/<int:id>/rentabilidad', methods=['GET'])
 @login_required
 def obtener_rentabilidad_producto(id):
@@ -72,7 +67,6 @@ def obtener_rentabilidad_producto(id):
         'rentabilidad': producto.calcular_rentabilidad()
     }), 200
 
-# Acceso: Solo Admins
 @api.route('/producto/<int:id>/reabastecer', methods=['POST'])
 @login_required
 def reabastecer_producto(id):
@@ -93,7 +87,6 @@ def reabastecer_producto(id):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-# Acceso: Solo Admins
 @api.route('/producto/<int:id>/renovar_inventario', methods=['POST'])
 @login_required
 def renovar_inventario_producto(id):
@@ -114,7 +107,6 @@ def renovar_inventario_producto(id):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-# Acceso: Admins y empleados
 @api.route('/ingredientes', methods=['GET'])
 @login_required
 def obtener_ingredientes():
@@ -128,7 +120,6 @@ def obtener_ingredientes():
         'stock': i.stock
     } for i in ingredientes]), 200
 
-# Acceso: Admins y empleados
 @api.route('/ingrediente/<int:id>', methods=['GET'])
 @login_required
 def obtener_ingrediente(id):
@@ -144,7 +135,6 @@ def obtener_ingrediente(id):
         'stock': ingrediente.stock
     }), 200
 
-# Acceso: Admins y empleados
 @api.route('/ingrediente/nombre/<string:nombre>', methods=['GET'])
 @login_required
 def obtener_ingrediente_por_nombre(nombre):
@@ -160,7 +150,6 @@ def obtener_ingrediente_por_nombre(nombre):
         'stock': ingrediente.stock
     }), 200
 
-# Acceso: Admins y empleados
 @api.route('/ingrediente/<int:id>/es_saludable', methods=['GET'])
 @login_required
 def es_saludable(id):
