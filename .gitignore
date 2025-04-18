@@ -38,5 +38,10 @@ pip-wheel-metadata/
 *.jpeg
 *.gif
 
+# ⚡ Ignorar otros archivos
+*.pdf
+*.docx
+.env
+
 # ⚡ Ignorar archivos innecesarios de Git
 .DS_Store
